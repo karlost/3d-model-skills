@@ -90,7 +90,7 @@ Ask by name, the agent changes the lines in `generate.py` and runs it again:
 
 | You say | What changes |
 |---|---|
-| "Make it smaller: TOP 150, ARM_Y 102, SPAN 100" | cross height, arm position, arm width |
+| "Make it smaller: TOP 150, ARM_Y 102, SPAN 100" | cross height, arm position, arm end to arm end |
 | "Shorter spike, the lump is hard" | `SPIKE_LEN` |
 | "Write BOO instead" | `TEXT` |
 | "Only four bones" | `BONES = [60, 50, 42, 36]` |
