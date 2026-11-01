@@ -18,9 +18,12 @@ Ask once and suggest the user writes the answer into their CLAUDE.md:
 ## Workflow
 
 1. **Ask only what this step needs.** Get the measurements that decide the fit (pipe diameter, screw size, wall thickness). Never size a functional fit from a dimension estimated from a photo: ask for a measurement or put it in a test first.
-2. **Proposal with a sketch.** Every design idea comes with a simple sketch right away: a cross-section or side view with labelled parts and key dimensions (matplotlib PNG or inline SVG). Offer 2-3 variants when the approach is not obvious and let the user pick.
+2. **Proposal with a named sketch.** Every design idea comes with a sketch right away (matplotlib PNG or inline SVG). Offer 2-3 variants when the approach is not obvious and let the user pick.
+   - Name everything the user may want to change: parts (*arm*, *spike*), faces (which one lies on the bed, which one is seen in use) and features (*slot*, *knob*).
+   - Label every size `NAME = value` with the exact parameter name the generator will use, e.g. `SPAN = 130`. The user then asks "SPAN 110" and it is one line in the code.
+   - `scripts/sketch.py` has helpers (`dim`, `radius`, `name`, `value`). Once the generator exists it draws `sketch.png` itself, so the sketch never drifts from the model. Example: `examples/grave-cross/generate.py`.
 3. **3D preview** for anything that is assembled from several parts: use the `3d-preview` skill.
-4. **Generator.** Write `model/generate.py`: parameters at the top in mm, one function per part, parts built with manifold3d and exported with trimesh. Export every part already oriented for printing (z = 0 is the bed).
+4. **Generator.** Write `model/generate.py`: parameters at the top in mm, named as in the sketch, one function per part, parts built with manifold3d and exported with trimesh. Export every part already oriented for printing (z = 0 is the bed).
    - `assert len(part.decompose()) == 1` for every assembled part, so a parameter change that splits it fails at once.
    - Avoid coplanar touching faces in unions: they leave duplicate vertices and the STL stops being watertight. After every `CrossSection.offset(..., Round)` on dense outlines call `.simplify(0.01)`.
    - Print the volume and size of each part.
@@ -45,7 +48,7 @@ Ask once and suggest the user writes the answer into their CLAUDE.md:
    - Per-part settings as a 4th item, e.g. `{"wall_loops": "3"}` or `{"sparse_infill_density": "100%"}`.
    - Another printer: `template="saved_project.3mf"` (see `scripts/templates/README.md`).
 8. **Slice** to get real time and grams (Windows): `python scripts/bambu_slice.py part.3mf`. Never run `bambu-studio.exe --slice` directly: a failed allocation pops an "Out of Memory" dialog over every window and the process crashes; the wrapper contains it on a hidden desktop. On macOS/Linux call the Bambu Studio CLI yourself. Report time and grams per plate.
-9. **Hand over**: the 3MF path, what is on each plate, time and grams, the print orientation and why. Opening it in the GUI and printing is the user's job.
+9. **Hand over**: the 3MF path, the named sketch, what is on each plate, time and grams, the print orientation and why. Opening it in the GUI and printing is the user's job.
 
 ## Design rules
 

@@ -13,14 +13,15 @@ The user wants to rotate the build and see the dimensions right away, not read t
 
 ## Where
 - Next to the project, e.g. `<project>/preview.html`. Note the link or path in the project README.
-- Generators export meshes for the page as JSON (`{"v": [...], "f": [...]}`), because an artifact cannot serve `.stl` files.
+- Generators export the meshes and parameters as `meshes.js` (`window.MODEL = {params, parts: {name: {v, f}}}`), loaded with `<script src="meshes.js">`. An artifact cannot serve `.stl` files, and `fetch()` fails when the page is opened from disk. Publish it with the page through `files`.
+- Example: `examples/grave-cross/preview.html`.
 
 ## What the page contains
 1. **3D scene**: three.js via importmap from a pinned CDN version (e.g. `https://cdn.jsdelivr.net/npm/three@0.160.0/`), OrbitControls, CSS2DRenderer.
    - Surroundings at real scale (wall, table, roof, pipe) when the part attaches to something.
    - Parts coloured by material (printed, bought tube, wood, fabric) so the colour square in the list matches the 3D.
    - **Numbered labels** on parts, the same numbers in the side list. Hovering a list item highlights the part.
-   - **Dimension lines** (lines + labels), toggled by a button.
+   - **Dimension lines** (lines + labels), toggled by a button. Label them with the generator's parameter names, the same as in the sketch (`SPAN 130`), so the user can ask for a change by name.
    - Mode switch (e.g. Frame / Frame + cover) and views (3D / Front / Side).
 2. **Side list of parts**: number, name, material (colour square), size, purpose.
 3. **Cards under the model**: main dimensions, cutting plan for bought material, printed parts (count, size, time and grams from the slicer), numbered build steps in real order, open questions.
