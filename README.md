@@ -66,7 +66,7 @@ examples/
 Requirements: Python 3.12+ and [Bambu Studio](https://github.com/bambulab/BambuStudio) (its filament presets are used for the 3MF).
 
 ```bash
-pip install -r requirements.txt
+pip install manifold3d trimesh numpy matplotlib
 ```
 
 **Claude Code** (as a plugin):
