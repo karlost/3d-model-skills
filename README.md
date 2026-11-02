@@ -16,7 +16,7 @@ Everything below is in [examples/grave-cross](examples/grave-cross) and was made
 
 > I have a lump of fake lava with an LED string on it. Put something scary in the middle of it.
 
-(Reconstructed from the original Czech conversation, shortened.) The first proposal was a skull. The answer was "that does not look scary", so it became a graveyard cross with small bones sinking round its foot.
+The first proposal was a skull. The answer was "that does not look scary", so it became a graveyard cross with small bones sinking round its foot.
 
 Two things stayed open: what the lump is made of and how big it is. So the cross got a plain spike (`SPIKE_LEN`) and the preview assumes a lump of about 60 cm.
 
