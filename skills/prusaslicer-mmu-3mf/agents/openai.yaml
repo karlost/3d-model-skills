@@ -1,0 +1,4 @@
+interface:
+  display_name: "PrusaSlicer MMU – 3MF"
+  short_description: "Tvorba a kontrola 3MF projektů pro PrusaSlicer MMU"
+  default_prompt: "Použij $prusaslicer-mmu-3mf pro vytvoření nebo opravu 3MF projektu se správnými díly, barvami a ověřením v cílové verzi PrusaSliceru."

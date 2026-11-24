@@ -1,15 +1,15 @@
 {
-  "name": "magiak",
+  "name": "karlost",
   "owner": {
-    "name": "magiak",
-    "url": "https://github.com/magiak"
+    "name": "karlost",
+    "url": "https://github.com/karlost"
   },
-  "description": "3D printing skills by magiak: design, check and prepare printable parts for Bambu Studio.",
+  "description": "3D printing skills for Bambu Studio and PrusaSlicer MMU.",
   "plugins": [
     {
       "name": "3d-model-skills",
       "source": "./",
-      "description": "Design 3D-printable parts with an AI agent: sketch, 3D preview, support-free check, minimal test prints and a ready-to-print Bambu Studio 3MF project."
+      "description": "Design and preview printable parts, prepare Bambu Studio projects, and create or validate PrusaSlicer MMU 3MF projects."
     }
   ]
 }

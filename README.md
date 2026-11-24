@@ -6,6 +6,8 @@ You describe the part. The agent asks for the few measurements that matter, draw
 
 Made for [Claude Code](https://claude.com/claude-code) and built while making Halloween decorations on a Bambu Lab P1S.
 
+This fork of [magiak/3d-model-skills](https://github.com/magiak/3d-model-skills) also includes a workflow for multicolor PrusaSlicer projects with MMU and MMU3.
+
 ![The grave-cross example in its 3D preview, "In the dark" mode](docs/images/grave-cross-preview-lava-dark.png)
 
 ## Example: from prompt to print
@@ -150,13 +152,19 @@ skills/
       templates/           P1S project settings used as the default printer
   3d-preview/
     SKILL.md               interactive three.js build preview with dimensions
+  prusaslicer-mmu-3mf/
+    SKILL.md               create, repair and validate multicolor PrusaSlicer projects
+    references/            project formats, migration and validation
+    scripts/
+      audit_3mf.py         read-only project audit
+      test_audit_3mf.py    tests for the audit
 examples/
   grave-cross/             full example: generate.py → sketch.png, preview.html, printcheck, grave-cross.3mf
 ```
 
 ## Install
 
-Requirements: Python 3.12+ and [Bambu Studio](https://github.com/bambulab/BambuStudio) (its filament presets are used for the 3MF).
+For the Bambu Studio workflow, install Python 3.12+, [Bambu Studio](https://github.com/bambulab/BambuStudio) and the Python dependencies:
 
 ```bash
 pip install manifold3d trimesh numpy matplotlib
@@ -165,8 +173,8 @@ pip install manifold3d trimesh numpy matplotlib
 **Claude Code** (as a plugin):
 
 ```
-/plugin marketplace add magiak/3d-model-skills
-/plugin install 3d-model-skills@magiak
+/plugin marketplace add karlost/3d-model-skills
+/plugin install 3d-model-skills@karlost
 ```
 
 Or copy the folders from `skills/` into `~/.claude/skills/`.
@@ -175,7 +183,21 @@ The skills use the open Agent Skills format (`SKILL.md`), so other agents that s
 
 Then just ask: *"Design a wall hook for a 25 mm broom handle, black PETG."*
 
-## Design rules in short
+## PrusaSlicer and MMU
+
+Use [prusaslicer-mmu-3mf](skills/prusaslicer-mmu-3mf/SKILL.md) to create or repair a multicolor 3MF, assign parts to filament slots, and validate the project in the target PrusaSlicer version. The workflow covers legacy 2.x and native 3.x projects.
+
+In Claude Code, run `/3d-model-skills:prusaslicer-mmu-3mf` or ask *"Prepare this 3MF for my CORE One with MMU3, using white in slot 1 and black in slot 4."* To install just this skill in Codex, copy the whole `skills/prusaslicer-mmu-3mf` folder into `~/.agents/skills/`.
+
+The audit uses the Python standard library. Run it from the repository root:
+
+```bash
+python3 skills/prusaslicer-mmu-3mf/scripts/audit_3mf.py project.3mf --target-major 3
+```
+
+Use the target [PrusaSlicer](https://github.com/prusa3d/PrusaSlicer) version to open and slice the final 3MF.
+
+## Bambu Studio design rules in short
 
 - One filament per part. Two materials = two parts that snap or pin together.
 - No supports: chamfers instead of overhangs, overhangs up to 45°, short bridges.
@@ -186,7 +208,7 @@ Then just ask: *"Design a wall hook for a 25 mm broom handle, black PETG."*
 
 The full rules with tested clearances are in [skills/3d-print-design/SKILL.md](skills/3d-print-design/SKILL.md).
 
-## Limits
+## Bambu Studio workflow limits
 
 - The default printer is a Bambu Lab P1S with a 0.4 mm nozzle. For another printer, save a Bambu Studio project with one filament and pass it as `template` (see [templates/README.md](skills/3d-print-design/scripts/templates/README.md)).
 - `bambu_slice.py` runs on Windows only. On macOS or Linux call the Bambu Studio CLI yourself.
